@@ -1,1 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
+@font-face {
+  font-family: 'Nimbus Sans L';
+  src: url('./fonts/nimbus-sans-l-webfont.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Spectral';
+  src: url('./fonts/spectral-regular-webfont.woff2') format('woff2'),
+       url('./fonts/spectral-regular-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Spectral';
+  src: url('./fonts/spectral-italic-webfont.woff2') format('woff2'),
+       url('./fonts/spectral-italic-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
+}
+
+body{
+  font-family: 'Spectral', sans-serif;
+}

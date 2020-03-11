@@ -1,1 +1,4 @@
-<p>data-list works!</p>
+<h3 class="data-list__heading">{{heading}}</h3>
+<ul *ngIf="entries" class="data-list__list">
+  <li *ngFor="let entry of entries|keyvalue" class="data-list__entry">{{entry.key}} <span class="data-list__entry--meta">({{entry.value}})</span></li>
+</ul>

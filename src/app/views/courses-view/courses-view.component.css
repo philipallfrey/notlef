@@ -1,0 +1,12 @@
+.app-courses-view{
+  display: grid;
+  grid-template-columns: 74% 4% 22%;
+}
+
+.page-heading{
+  grid-column: 1 / span 3;
+}
+
+.data-list{
+  grid-column: 3 / span 1;
+}

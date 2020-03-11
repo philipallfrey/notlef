@@ -1,0 +1,21 @@
+.data-list__heading{
+  border-bottom: solid 1px;
+  font-size: 1rem;
+  font-weight: normal;
+  text-transform: uppercase;
+}
+
+.data-list__list{
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.data-list__entry{
+  font-style: italic;
+}
+
+.data-list__entry--meta{
+  font-size: 0.75rem;
+  font-style: normal;
+  text-transform: uppercase;
+}

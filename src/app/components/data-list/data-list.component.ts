@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { KeyValuePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-data-list',
+  selector: 'data-list',
   templateUrl: './data-list.component.html',
   styleUrls: ['./data-list.component.css']
 })
