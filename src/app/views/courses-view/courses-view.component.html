@@ -1,9 +1,9 @@
 <div class="grid-container">
   <page-heading heading="Courses" subHeading="Temporary subheading"></page-heading>
-  <data-list heading="Most recent course titles" [entries]="getCourseTitles(20)"></data-list>
+  <data-list heading="Most recent course titles" [entries]="getCourseTitles(15)"></data-list>
   <courses-by-year-chart></courses-by-year-chart>
-  <factoid heading="Total courses" [fact]="getTotal()" class="factoid-total"></factoid>
-  <factoid heading="Most common language" [fact]="getMostCommonLanguage()" class="factoid-most-common"></factoid>
-  <factoid heading="Recurring courses" [fact]="getRecurringPercentage()" class="factoid-recurring"></factoid>
-  <factoid heading="Languages" [fact]="getLanguageCount()" [list]="getLanguages()" class="factoid-languages"></factoid>
+  <factoid heading="Total courses" [fact]="total" class="factoid-total"></factoid>
+  <factoid heading="Most common language" [fact]="mostCommonLanguage" class="factoid-most-common"></factoid>
+  <factoid heading="Recurring courses" [fact]="recurringPercentage" class="factoid-recurring"></factoid>
+  <factoid heading="Languages" [fact]="languageCount" [list]="languages" class="factoid-languages"></factoid>
 </div>

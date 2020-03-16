@@ -10,8 +10,10 @@ export interface ICourseData {
   deleted: boolean,
   deletion_reason_id: number,
   approved: boolean,
-  created: string, //date
-  updated: string, //date
+  created: string, //date string
+  createdDate: number, //timestamp in milliseconds
+  updated: string, //date string
+  updatedDate: number, //timestamp in milliseconds
   name: string,
   description: string,
   country_id: number,

@@ -1,4 +1,4 @@
-<heading text="heading"></heading>
+<heading [text]="heading"></heading>
 <ul *ngIf="entries" class="data-list__list">
   <li *ngFor="let entry of entries" class="data-list__entry">{{entry.text}} <span class="data-list__entry--meta">({{entry.meta}})</span></li>
 </ul>
