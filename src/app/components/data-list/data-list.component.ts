@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { KeyValuePipe } from '@angular/common';
+import { IDataListEntry } from '../../models/IDataListEntry';
 
 @Component({
   selector: 'data-list',
@@ -8,7 +9,7 @@ import { KeyValuePipe } from '@angular/common';
 })
 export class DataListComponent implements OnInit {
   @Input() heading: string;
-  @Input() entries: Record<string, number>;
+  @Input() entries: IDataListEntry;
 
   constructor() { }
 

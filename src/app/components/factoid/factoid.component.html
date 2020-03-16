@@ -1,1 +1,5 @@
-<p>factoid works!</p>
+<heading text="heading"></heading>
+<p class="factoid__fact">{{fact}}</p>
+<ul class="factoid__list "*ngIf="list">
+  <li class="factoid__entry" *ngFor="let entry of list">{{entry}}</li>
+</ul>

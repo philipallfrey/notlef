@@ -1,6 +1,6 @@
 .page-header__heading{
   font-family: 'Nimbus Sans L', sans-serif;
-  font-size: 3rem;
+  font-size: 4.5rem;
   line-height: 1em;
   margin: 0;
 }
@@ -8,4 +8,5 @@
 .page-header__subheading{
   font-weight: normal;
   font-size: 1rem;
+  margin-top: 0;
 }

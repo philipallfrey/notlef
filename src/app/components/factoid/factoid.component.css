@@ -1,0 +1,32 @@
+.factoid__heading{
+  border-bottom: solid 1px;
+  font-size: 0.75rem;
+  font-weight: normal;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.factoid__fact{
+  font-family: 'Nimbus Sans L', sans-serif;
+  font-size: 3rem;
+  line-height: 1em;
+  margin: 0;
+}
+
+.factoid__list{
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.factoid__entry{
+  display: inline;
+  text-transform: uppercase;
+}
+
+.factoid__entry:after{
+  content: ', ';
+}
+
+.factoid__entry:last-child:after{
+  content: none;
+}

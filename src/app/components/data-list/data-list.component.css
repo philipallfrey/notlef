@@ -1,10 +1,3 @@
-.data-list__heading{
-  border-bottom: solid 1px;
-  font-size: 1rem;
-  font-weight: normal;
-  text-transform: uppercase;
-}
-
 .data-list__list{
   list-style-type: none;
   padding-left: 0;
@@ -12,6 +5,7 @@
 
 .data-list__entry{
   font-style: italic;
+  margin-bottom: 0.75em;
 }
 
 .data-list__entry--meta{
