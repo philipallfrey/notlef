@@ -1,12 +1,40 @@
-.app-courses-view{
+.grid-container{
   display: grid;
-  grid-template-columns: 74% 4% 22%;
+  grid-column-gap: 4%;
+  grid-template-columns: repeat(4, 1fr [col-start]);
 }
 
-.page-heading{
+page-heading{
+  grid-column: 1 / span 4;
+  grid-row: 1 /span 1;
+}
+
+data-list{
+  grid-column: 4 / span 1;
+  grid-row: 2 / span 3;
+}
+
+courses-by-year-chart{
   grid-column: 1 / span 3;
+  grid-row: 2 / span 1;
 }
 
-.data-list{
+.factoid-total{
+  grid-column: 1 / span 1;
+  grid-row: 3 / span 1;
+}
+
+.factoid-most-common{
+  grid-column: 2 / span 1;
+  grid-row: 3 / span 1;
+}
+
+.factoid-languages{
   grid-column: 3 / span 1;
+  grid-row: 3 / span 2;
+}
+
+.factoid-recurring{
+  grid-column: 1 / span 1;
+  grid-row: 4 / span 1;
 }
