@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ICourseData } from '../models/ICourseData';
-import { IDataListEntry} from '../models/IDataListEntry';
+import { IDataListEntry } from '../models/IDataListEntry';
+import { ILongestCourse } from '../models/ILongestCourse';
 import { INamedIdentifierWithCount } from '../models/INamedIdentifierWithCount';
 import { ApiService } from '../services/api.service';
 
@@ -8,12 +9,16 @@ import { ApiService } from '../services/api.service';
   providedIn: 'root'
 })
 export class CoursesViewDataService {
-  readonly ENDPOINT = '/courses/index';
+  readonly ENDPOINT: string = '/courses/index';
+  readonly now: Date = new Date();
+  public hasData = false;
   data: ICourseData[] = [];
   languagesWithCounts: INamedIdentifierWithCount[] = [];
 
   constructor(private apiService: ApiService) {
     this.apiService.getData(this.ENDPOINT).subscribe( data => {
+      console.log("received data");
+      this.hasData = true;
       this.data = data as ICourseData[];
       this.groupByLanguages();
     });
@@ -81,5 +86,44 @@ export class CoursesViewDataService {
     .length;
     console.log(recurring, this.data.length );
     return (100 * recurring / this.data.length).toFixed(1) + '%';
+  }
+
+  getLongestRunningCourse(): ILongestCourse{
+    if( this.data.length === 0 ) return {data: [], duration: ''};
+    const course = this.data
+    .filter( (x: ICourseData) => x.recurring === true)
+    .sort((a, b) => a.created > b.created ? 1 : (a.created === b.created ? 0 : -1))
+    //.slice(0,1) ?to clone data
+    .pop();
+
+    const MILLISECONDS_PER_YEAR = 1000 * 60 * 60 * 24 * 365;
+    const duration = (this.now.getTime() - new Date(course.created).getTime()) / MILLISECONDS_PER_YEAR;
+    const longestCourse: ILongestCourse = {data: [course.name, course.institution.name], duration: `${duration.toFixed(1)} years`};
+    return longestCourse;
+  }
+//TODO: use Map as output?
+  getCoursesByYearAndMonth(years: number[]): Map<number, number[]>{
+    if( this.data.length === 0 ) return new Map();
+    //let output = Array(years.length).fill( Array(12).fill(0) );
+    let output = new Map();
+    years.forEach( year => {
+      output.set(year, Array(12).fill(0) );
+    });
+    console.log("initial output map", output);
+
+    this.data
+      .filter( (x: ICourseData) => x.created !== null )
+      .forEach( current => {
+        const date = new Date(current.created)
+        const month = date.getMonth();
+        const year = date.getFullYear();
+        let yearData = output.get(year);
+        let monthData = yearData[month];
+        monthData = monthData + 1;
+        yearData[month] = monthData;
+        output.set(year, yearData);
+      })
+
+      return output;
   }
 }

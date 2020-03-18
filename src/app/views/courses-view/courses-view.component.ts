@@ -8,6 +8,8 @@ import { CoursesViewDataService } from '../../services/courses-view-data.service
   styleUrls: ['./courses-view.component.css']
 })
 export class CoursesViewComponent implements OnInit {
+  //TODO fill automatically
+  years: number[] = [2014, 2015, 2016, 2017, 2018, 2019, 2020];
 
   constructor(public coursesViewDataService: CoursesViewDataService) { }
 
@@ -36,6 +38,10 @@ export class CoursesViewComponent implements OnInit {
 
   get recurringPercentage(){
     return this.coursesViewDataService.getRecurringPercentage();
+  }
+
+  get longestRunning(){
+    return this.coursesViewDataService.getLongestRunningCourse();
   }
 
 }

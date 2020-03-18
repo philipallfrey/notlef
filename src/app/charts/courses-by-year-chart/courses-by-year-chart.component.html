@@ -1,6 +1,7 @@
-<div style="display: block;">
-  <canvas baseChart width="400" height="100"
-    [datasets]="lineChartData"
+<heading text="Figure 1: Dates courses added to Registry"></heading>
+<div *ngFor="let year of years" class="canvas-wrapper">
+  <canvas baseChart width="400" height="32"
+    [datasets]="lineChartData[year]"
     [labels]="lineChartLabels"
     [options]="lineChartOptions"
     [colors]="lineChartColors"
