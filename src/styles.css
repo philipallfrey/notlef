@@ -25,3 +25,28 @@
 body{
   font-family: 'Spectral', sans-serif;
 }
+
+.grid-container{
+  display: grid;
+  grid-column-gap: 4%;
+  grid-row-gap: 1.5rem;
+  grid-template-columns: repeat(4, 1fr [col-start]);
+}
+
+data-list{
+  grid-column: 4 / span 1;
+  grid-row: 1 / span 4;
+}
+
+/* These variables are set by the ColorService */
+.primary{
+  color: var(--primary-color);
+}
+
+.secondary{
+  color: var(--secondary-color);
+}
+
+.tertiary{
+  color: var(--tertiary-color);
+}

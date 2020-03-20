@@ -10,6 +10,7 @@ import { IDataListEntry } from '../../models/IDataListEntry';
 export class DataListComponent implements OnInit {
   @Input() heading: string;
   @Input() entries: IDataListEntry;
+  //TODO: Allow entries to filter all the data on the page
 
   constructor() { }
 

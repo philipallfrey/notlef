@@ -8,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class PageHeadingComponent implements OnInit {
   @Input() heading: string;
   @Input() subHeading: string;
+  @Input() color: string; //Use constants?
 
   constructor() { }
 

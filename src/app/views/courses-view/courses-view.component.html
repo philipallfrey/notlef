@@ -1,4 +1,4 @@
-  <page-heading heading="Courses" subHeading="Dates and languages"></page-heading>
+  <page-heading heading="Courses" subHeading="Dates and languages" color="tertiary"></page-heading>
   <div class="grid-container" *ngIf="coursesViewDataService.hasData === true">
     <data-list heading="Most recent course titles" [entries]="getCourseTitles(20)"></data-list>
     <courses-by-year-chart [years]="years"></courses-by-year-chart>
