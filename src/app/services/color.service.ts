@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Colors } from '../constants/colors';
+import { Colors } from '../constants/Colors';
 
 @Injectable({
   providedIn: 'root'
