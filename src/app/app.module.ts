@@ -12,6 +12,8 @@ import { CoursesViewComponent } from './views/courses-view/courses-view.componen
 import { OverviewComponent } from './views/overview/overview.component';
 import { CoursesByYearChartComponent } from './charts/courses-by-year-chart/courses-by-year-chart.component';
 import { HeadingComponent } from './components/heading/heading.component';
+import { PlacesViewComponent } from './views/places-view/places-view.component';
+import { CoursesByPlaceChartComponent } from './charts/courses-by-place-chart/courses-by-place-chart.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { HeadingComponent } from './components/heading/heading.component';
     CoursesViewComponent,
     OverviewComponent,
     CoursesByYearChartComponent,
-    HeadingComponent
+    HeadingComponent,
+    PlacesViewComponent,
+    CoursesByPlaceChartComponent
   ],
   imports: [
     BrowserModule,

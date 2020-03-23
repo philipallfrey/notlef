@@ -1,5 +1,5 @@
 export interface INamedIdentifierWithCount {
-  count: number,
+  course_count: number,
   id: number,
   name: string
 }

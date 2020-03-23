@@ -1,0 +1,35 @@
+/* TODO: Give this a class */
+courses-by-place-chart{
+  grid-column: 1 / span 3;
+
+}
+
+.factoid-countries{
+  grid-column: 1 / span 3;
+  grid-row: 3 / span 1;
+}
+
+.factoid-total-institutions{
+  grid-column: 1 / span 1;
+  grid-row: 4 / span 1;
+}
+
+.factoid-institution-most-courses{
+  grid-column: 2 / span 2;
+  grid-row: 4 / span 1;
+}
+
+.factoid-city-most-courses{
+  grid-column: 1 / span 1;
+  grid-row: 5 / span 1;
+}
+
+.factoid-city-most-institutions{
+  grid-column: 2 / span 1;
+  grid-row: 5 / span 1;
+}
+
+.factoid-cities{
+  grid-column: 3 / span 1;
+  grid-row: 5 / span 1;
+}

@@ -39,15 +39,14 @@ export class CoursesByYearChartComponent implements OnInit {
   public lineChartLegend = false;
   public lineChartType: ChartType = 'line';
   public lineChartPlugins = [];
+  private maxAxis: number;
 
   constructor( private coursesViewDataService: CoursesViewDataService) { }
 
   ngOnInit() {
     const data: Map<number, number[]> = this.coursesViewDataService.getCoursesByYearAndMonth(this.years);
-    console.log("data is ",data);
     this.populateChartData(data);
-    this.setMaxAxis(data);
-    console.log(this.lineChartOptions);
+    this.findMaxAxis(data);
   }
 
   populateChartData(data: Map<number, number[]>){
@@ -58,18 +57,21 @@ export class CoursesByYearChartComponent implements OnInit {
         accumulator = [...accumulator, 0, current];
         return accumulator;
       }, []);
-      console.log("year is", year)
-      this.lineChartData[year] = [{ data: [...pseudoGaussian, 0], label: `${year}`, pointRadius: 0 },{data: [53], pointRadius: 0, label: ''},];
+      //Set second dataset with invisible point to keep scales consistent.
+      //Workaround for unsupported this.lineChartOptions.scales.yAxes[0].max option
+      this.lineChartData[year] = [{ data: [...pseudoGaussian, 0], label: `${year}`, pointRadius: 0 },{data: [this.maxAxis], pointRadius: 0, label: ''}];
     })
   }
 
-  setMaxAxis(data: Map<number, number[]>): void{
+  findMaxAxis(data: Map<number, number[]>): void{
     let max = 0;
     data.forEach( (current, year) => {
       console.log(year, current);
       const currentMax = Math.max(...current);
       max = currentMax > max ? currentMax : max;
     });
+    this.maxAxis = max;
+
     //TODO Update @types to support this option
     //this.lineChartOptions.scales.yAxes[0].max = max;
   }

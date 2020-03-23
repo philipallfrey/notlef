@@ -1,0 +1,12 @@
+<heading text="Figure 2: Courses by region"></heading>
+<div *ngFor="let row of rows" class="canvas-wrapper">
+  <canvas baseChart width="400" height="96"
+    [datasets]="lineChartData[row]"
+    [labels]="lineChartLabels[row]"
+    [options]="lineChartOptions"
+    [colors]="lineChartColors"
+    [legend]="lineChartLegend"
+    [chartType]="lineChartType"
+    [plugins]="lineChartPlugins">
+  </canvas>
+</div>
