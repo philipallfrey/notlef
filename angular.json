@@ -27,7 +27,6 @@
               "src/styles.css"
             ],
             "scripts": [
-              "node_modules/patternomaly/dist/patternomaly.js"
             ]
           },
           "configurations": {
