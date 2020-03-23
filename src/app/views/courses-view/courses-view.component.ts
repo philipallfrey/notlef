@@ -8,16 +8,17 @@ import { CoursesViewDataService } from '../../services/courses-view-data.service
   styleUrls: ['./courses-view.component.css']
 })
 export class CoursesViewComponent implements OnInit {
-  //TODO fill automatically
+  //TODO fill automatically, or maybe get from Map?
   years: number[] = [2014, 2015, 2016, 2017, 2018, 2019, 2020];
+  coursesLimit: number = 20;
 
   constructor(public coursesViewDataService: CoursesViewDataService) { }
 
   ngOnInit(): void {
   }
 
-  getCourseTitles( limit: number ){
-    return this.coursesViewDataService.getCourseTitles(limit);
+  get courseTitles(){
+    return this.coursesViewDataService.getCourseTitles(this.coursesLimit);
   }
 
   get total(){
@@ -36,12 +37,12 @@ export class CoursesViewComponent implements OnInit {
     return this.coursesViewDataService.getLanguages();
   }
 
-  get recurringPercentage(){
-    return this.coursesViewDataService.getRecurringPercentage();
+  get onlineCourses(){
+    return this.coursesViewDataService.getOnlineCourses();
   }
 
-  get longestRunning(){
-    return this.coursesViewDataService.getLongestRunningCourse();
+  get recurringPercentage(){
+    return this.coursesViewDataService.getRecurringPercentage();
   }
 
 }

@@ -1,29 +1,37 @@
 import { Injectable } from '@angular/core';
+import { Endpoints } from '../constants/Endpoints';
 import { ICourseData } from '../models/ICourseData';
 import { IDataListEntry } from '../models/IDataListEntry';
-import { ILongestCourse } from '../models/ILongestCourse';
 import { INamedIdentifierWithCount } from '../models/INamedIdentifierWithCount';
 import { ApiService } from '../services/api.service';
+import { DigitToWordService } from '../services/digit-to-word.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CoursesViewDataService {
-  readonly ENDPOINT: string = '/courses/index';
   readonly now: Date = new Date();
   public hasData = false;
   data: ICourseData[] = [];
   languagesWithCounts: INamedIdentifierWithCount[] = [];
 
-  constructor(private apiService: ApiService) {
-    this.apiService.getData(this.ENDPOINT).subscribe( data => {
+  constructor(private apiService: ApiService, private digitToWordService: DigitToWordService) {
+    this.apiService.getData(Endpoints.COURSES).subscribe( data => {
       console.log("received data");
       this.hasData = true;
-      this.data = data as ICourseData[];
+      this.data = this.manuallyInsertOnlineData(data) as ICourseData[];
       this.groupByLanguages();
     });
   }
 
+  //Unfortunately ICourseData.online is in the schema but not in the data returned by the API
+  private manuallyInsertOnlineData(data: any[]) {
+    const onlineCourseIds = [170, 175, 177, 178, 598];
+    return data.map(current => {
+      if(onlineCourseIds.includes(current.id)) current.online = true;
+      return current;
+    });
+  }
   getCourseTitles( limit: number ): IDataListEntry[] {
     let titles: IDataListEntry[] = this.data
     .sort((a, b) => b.updated > a.updated ? 1 : (b.updated === a.updated ? 0 : -1) )
@@ -50,10 +58,10 @@ export class CoursesViewDataService {
   private groupByLanguages(): void {
     this.languagesWithCounts = this.data.reduce( (accumulator, current) => {
       if (accumulator[current.language_id]){
-        accumulator[current.language_id].count++;
+        accumulator[current.language_id].course_count++;
       } else {
         accumulator[current.language_id] = current.language;
-        accumulator[current.language_id].count = 1;
+        accumulator[current.language_id].course_count = 1;
       }
       return accumulator;
     }, [] )
@@ -62,9 +70,9 @@ export class CoursesViewDataService {
 
   getMostCommonLanguage(): string{
     const language: INamedIdentifierWithCount = this.languagesWithCounts.reduce( (highest, current: INamedIdentifierWithCount) => {
-      if(current.count > highest.count) highest = current;
+      if(current.course_count > highest.course_count) highest = current;
       return highest;
-    }, { id: 0, name: '', count: 0 });
+    }, { id: 0, name: '', course_count: 0 });
 
     return language.name;
   }
@@ -84,24 +92,19 @@ export class CoursesViewDataService {
     const recurring = this.data
     .filter( (x: ICourseData) => x.recurring === true)
     .length;
-    console.log(recurring, this.data.length );
     return (100 * recurring / this.data.length).toFixed(1) + '%';
   }
 
-  getLongestRunningCourse(): ILongestCourse{
-    if( this.data.length === 0 ) return {data: [], duration: ''};
-    const course = this.data
-    .filter( (x: ICourseData) => x.recurring === true)
-    .sort((a, b) => a.created > b.created ? 1 : (a.created === b.created ? 0 : -1))
-    //.slice(0,1) ?to clone data
-    .pop();
-
-    const MILLISECONDS_PER_YEAR = 1000 * 60 * 60 * 24 * 365;
-    const duration = (this.now.getTime() - new Date(course.created).getTime()) / MILLISECONDS_PER_YEAR;
-    const longestCourse: ILongestCourse = {data: [course.name, course.institution.name], duration: `${duration.toFixed(1)} years`};
-    return longestCourse;
+  getOnlineCourses(): number | string {
+    let count = 0;
+    if( this.data.length !== 0 ){
+      count = this.data
+        .filter(x => x.online === true)
+        .length;
+      }
+      return this.digitToWordService.convert(count);
   }
-//TODO: use Map as output?
+
   getCoursesByYearAndMonth(years: number[]): Map<number, number[]>{
     if( this.data.length === 0 ) return new Map();
     //let output = Array(years.length).fill( Array(12).fill(0) );

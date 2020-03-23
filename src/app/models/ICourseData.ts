@@ -22,6 +22,7 @@ export interface ICourseData {
   department: string,
   course_parent_type_id: number, //enum
   course_type_id: number, //enum
+  online?: boolean,
   language_id: number, //enum
   access_requirements: string,
   start_date: string, //date
