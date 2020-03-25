@@ -27,6 +27,15 @@ export class CoursesByYearChartComponent implements OnInit {
         type: 'logarithmic',
         display: false
       }]
+    },
+    plugins: {
+      // Change options for ALL labels of THIS CHART
+      datalabels: {
+        display: false,
+        font:{
+          family: 'Nimbus Sans L'
+        },
+      }
     }
   };
   //Change type from Colors[] to any, to allow use of patterns

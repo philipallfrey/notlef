@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
+import * as ChartDataLabels from 'chartjs-plugin-datalabels';
 import { draw } from 'patternomaly';
 
 @Component({
@@ -18,9 +19,13 @@ export class CoursesByPlaceChartComponent implements OnInit {
   public lineChartData: Record<number, ChartDataSets[]> = {};
   public lineChartLabels: Record<number, Label[]> = {};
   public lineChartOptions: ChartOptions = {
+
     responsive: true,
     scales:{
       xAxes:[{
+        ticks:{
+          fontFamily: 'Spectral'
+        },
         gridLines: {
           display: false
         }
@@ -29,6 +34,15 @@ export class CoursesByPlaceChartComponent implements OnInit {
         type: 'logarithmic',
         display: false
       }]
+    },
+    plugins: {
+      // Change options for ALL labels of THIS CHART
+      datalabels: {
+        font:{
+          family: 'Nimbus Sans L',
+          size: 14 
+        },
+      }
     }
   };
   //Change type from Colors[] to any, to allow use of patterns
@@ -40,7 +54,7 @@ export class CoursesByPlaceChartComponent implements OnInit {
   ];
   public lineChartLegend = false;
   public lineChartType: ChartType = 'line';
-  public lineChartPlugins = [];
+  public lineChartPlugins = [ChartDataLabels];
 
   constructor() { }
 
@@ -77,9 +91,23 @@ export class CoursesByPlaceChartComponent implements OnInit {
         accumulator = [...accumulator, 0, current];
         return accumulator;
       }, []);
+      const dataLabels = values.reduce( (accumulator, current) => {
+        accumulator = [...accumulator, false, true];
+        return accumulator;
+      }, []);
       this.lineChartData[row] = [
-        { data: [...pseudoGaussian,0], label: '', pointRadius: 0 },
-        { data: [this.maxAxis], label: '', pointRadius: 0 }
+        { data: [...pseudoGaussian, 0],
+          datalabels:{
+            anchor: 'start',
+            align: function(context){ return context.dataset.data[context.dataIndex] > 4 ? 'bottom' : 'top'},
+            color: '#333',
+            display: [...dataLabels, false],
+            rotation: 0,
+          },
+          label: '',
+          pointRadius: 0
+        },
+        { data: [this.maxAxis], datalabels: {display: [false]}, label: '', pointRadius: 0 }
       ];
 
       const labels = [...this.data[row].keys()];
