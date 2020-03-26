@@ -1,8 +1,8 @@
-<page-heading heading="Places" subHeading="Countries, Cities, and Institutions." [color]="colorClass"></page-heading>
+<page-heading heading="Places" subHeading="Countries, Cities, and Institutions." [color]="colorClass" [filter]="filterElement.name" backward="/courses" forward="/content"></page-heading>
 <div class="grid-container" *ngIf="placesViewDataService.hasData === true">
   <data-list heading="Institutions with the most courses" [entries]="institutions"></data-list>
   <courses-by-place-chart [data]="countriesByRegion" [color]="color"></courses-by-place-chart>
-  <factoid heading="Countries" [fact]="countriesCount" [list]="countries" class="factoid-countries"></factoid>
+  <factoid heading="Countries" [fact]="countriesCount" [list]="countries" [color]="colorClass" isFilter="true" [currentFilter]="filterElement" view="/places" class="factoid-countries"></factoid>
   <factoid heading="Number of institutions" [fact]="institutionsCount" class="factoid-total-institutions"></factoid>
   <factoid heading="Institution with the most courses" [fact]="institutionWithMostCourses" class="factoid-institution-most-courses"></factoid>
   <factoid heading="City with the most courses" [fact]="cityWithMostCourses?.fact" [list]="cityWithMostCourses?.list" class="factoid-city-most-courses"></factoid>

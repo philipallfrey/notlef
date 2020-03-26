@@ -38,7 +38,7 @@ data-list{
   grid-row: 1 / span 4;
 }
 
-/* These variables are set by the ColorService */
+/* These three variables are set by the ColorService */
 .primary{
   color: var(--primary-color);
 }
@@ -49,4 +49,8 @@ data-list{
 
 .tertiary{
   color: var(--tertiary-color);
+}
+
+.inactive{
+  color: #ccc;
 }

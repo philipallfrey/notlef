@@ -7,7 +7,9 @@ import { OverviewComponent } from './views/overview/overview.component';
 const routes: Routes = [
   { path: '', component: OverviewComponent },
   { path: 'courses', component: CoursesViewComponent },
-  { path: 'places', component: PlacesViewComponent }
+  { path: 'courses/:name/:value', component: CoursesViewComponent },
+  { path: 'places', component: PlacesViewComponent },
+  { path: 'places/:name/:value', component: PlacesViewComponent }
 ];
 
 @NgModule({

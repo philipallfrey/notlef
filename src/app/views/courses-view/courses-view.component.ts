@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+import { Colors } from '../../constants/Colors';
+import { IDataListEntry } from '../../models/IDataListEntry';
+import { IFilterElement } from '../../models/IFilterElement';
 import { CoursesViewDataService } from '../../services/courses-view-data.service';
 
 @Component({
@@ -10,38 +14,52 @@ import { CoursesViewDataService } from '../../services/courses-view-data.service
 export class CoursesViewComponent implements OnInit {
   //TODO fill automatically, or maybe get from Map?
   years: number[] = [2014, 2015, 2016, 2017, 2018, 2019, 2020];
-  coursesLimit: number = 20;
+  private coursesLimit: number = 20;
+  public color: string = Colors.TERTIARY;
+  public colorClass: string = 'tertiary';
+  public filterElement: IFilterElement;
 
-  constructor(public coursesViewDataService: CoursesViewDataService) { }
+  constructor(private route: ActivatedRoute, public coursesViewDataService: CoursesViewDataService) { }
 
   ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      const value = +params.get('value');
+      const name = params.get('name') || '';
+      this.filterElement = {name: name, value: value} as IFilterElement;
+      console.log("name, value", name, value);
+      this.coursesViewDataService.filter(value);
+    })
   }
 
-  get courseTitles(){
+  get coursesByYearAndMonth(): Map<number, number[]> {
+    return this.coursesViewDataService.getCoursesByYearAndMonth(this.years);
+  }
+
+  get courseTitles(): IDataListEntry[]{
     return this.coursesViewDataService.getCourseTitles(this.coursesLimit);
   }
 
-  get total(){
+  get total(): number{
     return this.coursesViewDataService.getTotal();
   }
 
-  get mostCommonLanguage(){
+  get mostCommonLanguage(): string{
     return this.coursesViewDataService.getMostCommonLanguage();
   }
 
-  get languageCount(){
+  get languageCount(): number{
     return this.coursesViewDataService.getLanguageCount();
   }
 
-  get languages(){
+  get languages(): IFilterElement[]{
     return this.coursesViewDataService.getLanguages();
   }
 
-  get onlineCourses(){
+  get onlineCourses(): number|string {
     return this.coursesViewDataService.getOnlineCourses();
   }
 
-  get recurringPercentage(){
+  get recurringPercentage(): string{
     return this.coursesViewDataService.getRecurringPercentage();
   }
 

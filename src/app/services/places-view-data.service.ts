@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Endpoints } from '../constants/Endpoints';
 import { IDataListEntry } from '../models/IDataListEntry';
 import { IFactList } from '../models/IFactList';
+import { IFilterElement } from '../models/IFilterElement';
 import { INamedIdentifierWithCount } from '../models/INamedIdentifierWithCount';
 import { IPlaceData } from '../models/IPlaceData';
 import { ApiService } from '../services/api.service';
@@ -16,6 +17,9 @@ export class PlacesViewDataService {
   citiesData: IPlaceData[] = [];
   countriesData: INamedIdentifierWithCount[] = [];
   institutionsData: IPlaceData[] = [];
+  filteredCitiesData: IPlaceData[] = [];
+  filteredCountriesData: INamedIdentifierWithCount[] = [];
+  filteredInstitutionsData: IPlaceData[] = [];
   institutionsPerCity: Map<string, number>;
 
   //TODO: Factor out some of the similarities between this and CoursesViewDataService
@@ -23,42 +27,59 @@ export class PlacesViewDataService {
     //TODO: Convert to a loop/function
     this.apiService.getData(Endpoints.CITIES).subscribe( data => {
       this.hasData = true; //TODO Split by data type?
-      this.citiesData = data as IPlaceData[];
+      this.citiesData = data.filter(x => x.course_count > 0) as IPlaceData[];
+      this.filteredCitiesData = this.citiesData;
     });
 
     this.apiService.getData(Endpoints.COUNTRIES).subscribe( data => {
       this.hasData = true; //TODO Split by data type?
-      this.countriesData = data as INamedIdentifierWithCount[];
+      this.countriesData = data.filter(x => x.course_count > 0) as INamedIdentifierWithCount[];
+      this.filteredCountriesData = this.countriesData;
     });
 
     this.apiService.getData(Endpoints.INSTITUTIONS).subscribe( data => {
       this.hasData = true; //TODO Split by data type?
-      this.institutionsData = data as IPlaceData[];
+      this.institutionsData = data.filter(x => x.course_count > 0) as IPlaceData[];
+      this.filteredInstitutionsData = this.institutionsData;
     });
 
   }
 
+  filter(value: number, field: string){
+    if( 0 === value ){
+      this.filteredCitiesData = this.citiesData
+      this.filteredCountriesData = this.countriesData
+      this.filteredInstitutionsData = this.institutionsData;
+    } else {
+      this.filteredCitiesData = this.citiesData.filter(x => x[field] === value);
+      this.filteredCountriesData = this.countriesData.filter(x => x['id'] === value); //TODO find a nicer way to handle this case
+      this.filteredInstitutionsData = this.institutionsData.filter(x => x[field] === value);
+    }
+  }
+
   getCities(): string[] {
-    if(this.citiesData.length === 0) return [];
-    return this.citiesData
+    if(this.filteredCitiesData.length === 0) return [];
+    return this.filteredCitiesData
       .map(current => current.name);
+
   }
 
   getCitiesCount(): number {
-    return this.citiesData.length;
+    return this.filteredCitiesData.length;
   }
 
   getCityWithMostCourses(): IFactList {
-    if(this.citiesData.length === 0) return {fact:'', list:[]} as IFactList;
-    return {fact: this.citiesData[0].name, list:[`${this.citiesData[0].course_count} courses`] } as IFactList;
+    if(this.filteredCitiesData.length === 0) return {fact:'', list:[]} as IFactList;
+
+    return {fact: this.filteredCitiesData[0].name, list:[`${this.filteredCitiesData[0].course_count} courses`] } as IFactList;
   }
 
-  getCountries(): string[] {
+  getCountries(): IFilterElement[] {
     if(this.countriesData.length === 0) return [];
 
     return this.countriesData
-      .map(current => current.name)
-      .sort();
+      .map(current => {return {name: current.name, value: current.id} as IFilterElement} )
+      .sort( (a,b) => a.name > b.name ? 1 : -1 );
   }
 
   getCountriesByRegion(): Map<string, number>[] {
@@ -66,7 +87,7 @@ export class PlacesViewDataService {
 
     let regions: Map<string, number> = new Map();
     this.countriesData.forEach( (current: INamedIdentifierWithCount) => {
-      const currentRegion = this.countryToRegionService.convert(current.name);
+      const currentRegion = this.countryToRegionService.convert(current.name).toUpperCase();
       if(regions.get(currentRegion)){
         regions.set(currentRegion, regions.get(currentRegion) + current.course_count);
       } else {
@@ -109,9 +130,9 @@ export class PlacesViewDataService {
   }
 
   getInstitutions(limit: number) : IDataListEntry[] {
-    if(this.institutionsData.length === 0) return [];
+    if(this.filteredInstitutionsData.length === 0) return [];
 
-    return this.institutionsData
+    return this.filteredInstitutionsData
     .slice(0,limit) //Institutions are already sorted by course count
     .map( current => {
       return {meta: current.course_count, text: current.name} as IDataListEntry;
@@ -119,19 +140,19 @@ export class PlacesViewDataService {
   }
 
   getInstitutionsCount(): number {
-    return this.institutionsData.length;
+    return this.filteredInstitutionsData.length;
   }
 
   getInstitutionWithMostCourses(): string {
-    if(this.institutionsData.length === 0) return '';
-    return this.institutionsData[0].name; //Currently there are two institutions with the most courses, for simplicity take the first
+    if(this.filteredInstitutionsData.length === 0) return '';
+    return this.filteredInstitutionsData[0].name; //Currently there are two institutions with the most courses, for simplicity take the first
   }
 
   getMostInstitutionsPerCity(): IFactList {
-    if (this.institutionsData.length === 0) return {fact:'', list:[]} as IFactList;
+    if (this.filteredInstitutionsData.length === 0) return {fact:'', list:[]} as IFactList;
 
     let cities = new Map();
-    this.institutionsData.forEach(current => {
+    this.filteredInstitutionsData.forEach(current => {
       if(cities.get(current.city.name)){
         cities.set(current.city.name, cities.get(current.city.name) + 1);
       } else {

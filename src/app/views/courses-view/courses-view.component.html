@@ -1,10 +1,10 @@
-  <page-heading heading="Courses" subHeading="Dates and languages" color="tertiary"></page-heading>
+  <page-heading heading="Courses" subHeading="Dates and languages" [color]="colorClass" [filter]="filterElement.name" backward="/overview" forward="/places"></page-heading>
   <div class="grid-container" *ngIf="coursesViewDataService.hasData === true">
     <data-list heading="Most recent course titles" [entries]="courseTitles"></data-list>
-    <courses-by-year-chart [years]="years"></courses-by-year-chart>
+    <courses-by-year-chart [data]="coursesByYearAndMonth" [years]="years"></courses-by-year-chart>
     <factoid heading="Total courses" [fact]="total" class="factoid-total"></factoid>
     <factoid heading="Most common language" [fact]="mostCommonLanguage" class="factoid-most-common"></factoid>
     <factoid heading="Recurring courses" [fact]="recurringPercentage" class="factoid-recurring"></factoid>
-    <factoid heading="Languages" [fact]="languageCount" [list]="languages" class="factoid-languages"></factoid>
+    <factoid heading="Languages" [fact]="languageCount" [list]="languages" [color]="colorClass" isFilter="true" [currentFilter]="filterElement" view="/courses" class="factoid-languages"></factoid>
     <factoid heading="Online courses" [fact]="onlineCourses" class="factoid-online"></factoid>
 </div>

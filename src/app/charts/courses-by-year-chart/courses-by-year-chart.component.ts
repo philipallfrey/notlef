@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
 import { draw } from 'patternomaly';
-import { CoursesViewDataService } from '../../services/courses-view-data.service';
 
 @Component({
   selector: 'courses-by-year-chart',
@@ -10,7 +9,9 @@ import { CoursesViewDataService } from '../../services/courses-view-data.service
   styleUrls: ['./courses-by-year-chart.component.css']
 })
 export class CoursesByYearChartComponent implements OnInit {
-  @Input() years: number[];
+  @Input() color: string;
+  @Input() data: Map<number, number[]>;
+  @Input() years: number[]; //TODO get from data
 
   public lineChartData: Record<number, ChartDataSets[]> = {};
   public lineChartLabels: Label[] = ['','Jan', '', 'Feb', '', 'Mar', '', 'Apr', '', 'May', '', 'Jun', '', 'Jul', '', 'Aug', '', 'Sep', '', 'Oct', '', 'Nov', '', 'Dec', ''];
@@ -50,18 +51,22 @@ export class CoursesByYearChartComponent implements OnInit {
   public lineChartPlugins = [];
   private maxAxis: number;
 
-  constructor( private coursesViewDataService: CoursesViewDataService) { }
+  constructor( ) { }
 
   ngOnInit() {
-    const data: Map<number, number[]> = this.coursesViewDataService.getCoursesByYearAndMonth(this.years);
-    this.populateChartData(data);
-    this.findMaxAxis(data);
+    console.log("data", this.data);
+    this.populateChartData();
+
   }
 
-  populateChartData(data: Map<number, number[]>){
+  get chartData(): Record<number, ChartDataSets[]> {
+    return this.populateChartData()
+  }
+  populateChartData(): Record<number, ChartDataSets[]>{
+    this.findMaxAxis(this.data);
     //TODO: Define a new type of bar chart where the bars are Gaussian shapes
     //The following workaround adds an extra zero between data points to get the same effect
-    data.forEach( (yearData, year) => {
+    this.data.forEach( (yearData, year) => {
       const pseudoGaussian = yearData.reduce( (accumulator, current) => {
         accumulator = [...accumulator, 0, current];
         return accumulator;
@@ -70,6 +75,8 @@ export class CoursesByYearChartComponent implements OnInit {
       //Workaround for unsupported this.lineChartOptions.scales.yAxes[0].max option
       this.lineChartData[year] = [{ data: [...pseudoGaussian, 0], label: `${year}`, pointRadius: 0 },{data: [this.maxAxis], pointRadius: 0, label: ''}];
     })
+
+    return this.lineChartData;
   }
 
   findMaxAxis(data: Map<number, number[]>): void{

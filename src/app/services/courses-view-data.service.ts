@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Endpoints } from '../constants/Endpoints';
 import { ICourseData } from '../models/ICourseData';
 import { IDataListEntry } from '../models/IDataListEntry';
+import { IFilterElement } from '../models/IFilterElement';
 import { INamedIdentifierWithCount } from '../models/INamedIdentifierWithCount';
 import { ApiService } from '../services/api.service';
 import { DigitToWordService } from '../services/digit-to-word.service';
@@ -10,18 +11,47 @@ import { DigitToWordService } from '../services/digit-to-word.service';
   providedIn: 'root'
 })
 export class CoursesViewDataService {
-  readonly now: Date = new Date();
   public hasData = false;
-  data: ICourseData[] = [];
-  languagesWithCounts: INamedIdentifierWithCount[] = [];
+  coursesData: ICourseData[] = [];
+  filterValue: number;
+  filteredCoursesData: ICourseData[] = [];
+  filteredLanguagesData: INamedIdentifierWithCount[] = [];
+  languagesData: INamedIdentifierWithCount[] = [];
 
   constructor(private apiService: ApiService, private digitToWordService: DigitToWordService) {
     this.apiService.getData(Endpoints.COURSES).subscribe( data => {
-      console.log("received data");
+      this.coursesData = this.manuallyInsertOnlineData(data) as ICourseData[];
+      if(this.filterValue){
+        this.filter(this.filterValue); //handle case where view is filtered before it finished loading data
+      } else {
+        this.filteredCoursesData = this.coursesData;
+      }
       this.hasData = true;
-      this.data = this.manuallyInsertOnlineData(data) as ICourseData[];
-      this.groupByLanguages();
+      console.log("has courses");
     });
+
+    this.apiService.getData(Endpoints.LANGUAGES).subscribe( data => {
+      this.languagesData = data.filter(x => x.course_count > 0) as INamedIdentifierWithCount[];
+      console.log("languages", this.languagesData);
+      if(this.filterValue){
+        this.filter(this.filterValue); //handle case where view is filtered before it finished loading data
+      } else {
+        this.filteredLanguagesData = this.languagesData;
+      }
+      //this.hasData = true; //TODO Split by data type?
+      console.log("has languages");
+    });
+  }
+
+  filter(value: number){
+    this.filterValue = value;
+    if( 0 === value ){
+      this.filteredCoursesData = this.coursesData;
+      this.filteredLanguagesData = this.languagesData;
+    } else {
+      this.filteredCoursesData = this.coursesData.filter(x => x['language_id'] === value);
+      this.filteredLanguagesData = this.languagesData.filter(x => x['id'] === value);
+    }
   }
 
   //Unfortunately ICourseData.online is in the schema but not in the data returned by the API
@@ -32,8 +62,11 @@ export class CoursesViewDataService {
       return current;
     });
   }
+
   getCourseTitles( limit: number ): IDataListEntry[] {
-    let titles: IDataListEntry[] = this.data
+    if(this.filteredCoursesData.length === 0) return [];
+
+    let titles: IDataListEntry[] = this.filteredCoursesData
     .sort((a, b) => b.updated > a.updated ? 1 : (b.updated === a.updated ? 0 : -1) )
     .map( current => {
       const newEntry: IDataListEntry = {
@@ -47,74 +80,59 @@ export class CoursesViewDataService {
     return titles;
   }
 
-  getYear(date: string): number {
-    return +date.slice(0,4);
+  getLanguageCount(): number{
+    return this.languagesData.length;
   }
 
-  getTotal(): number {
-    return this.data.length;
-  }
+  getLanguages(): IFilterElement[]{
+    if(this.languagesData.length === 0) return [];
 
-  private groupByLanguages(): void {
-    this.languagesWithCounts = this.data.reduce( (accumulator, current) => {
-      if (accumulator[current.language_id]){
-        accumulator[current.language_id].course_count++;
-      } else {
-        accumulator[current.language_id] = current.language;
-        accumulator[current.language_id].course_count = 1;
-      }
-      return accumulator;
-    }, [] )
-    .filter(x => x !== null );
+    return this.languagesData
+      .map(current => {return {name: current.name, value: current.id} as IFilterElement} )
+      .sort( (a,b) => a.name > b.name ? 1 : -1 );
   }
 
   getMostCommonLanguage(): string{
-    const language: INamedIdentifierWithCount = this.languagesWithCounts.reduce( (highest, current: INamedIdentifierWithCount) => {
-      if(current.course_count > highest.course_count) highest = current;
-      return highest;
-    }, { id: 0, name: '', course_count: 0 });
+    if( this.filteredLanguagesData.length === 0 ) return '';
 
-    return language.name;
-  }
-
-  getLanguageCount(): number{
-    return this.languagesWithCounts.length;
-  }
-
-  getLanguages(){
-    return this.languagesWithCounts
-      .map( (x: INamedIdentifierWithCount) => x.name )
-      .sort();
-  }
-
-  getRecurringPercentage(): string{
-    if (this.data.length === 0) return '0%';
-    const recurring = this.data
-    .filter( (x: ICourseData) => x.recurring === true)
-    .length;
-    return (100 * recurring / this.data.length).toFixed(1) + '%';
+    return this.filteredLanguagesData[0].name;
   }
 
   getOnlineCourses(): number | string {
     let count = 0;
-    if( this.data.length !== 0 ){
-      count = this.data
+    if( this.filteredCoursesData.length !== 0 ){
+      count = this.filteredCoursesData
         .filter(x => x.online === true)
         .length;
-      }
-      return this.digitToWordService.convert(count);
+    }
+    return this.digitToWordService.convert(count);
   }
 
-  getCoursesByYearAndMonth(years: number[]): Map<number, number[]>{
-    if( this.data.length === 0 ) return new Map();
-    //let output = Array(years.length).fill( Array(12).fill(0) );
+  getRecurringPercentage(): string{
+    if (this.filteredCoursesData.length === 0) return '0%';
+    const recurring = this.filteredCoursesData
+      .filter( (x: ICourseData) => x.recurring === true)
+      .length;
+    return (100 * recurring / this.filteredCoursesData.length).toFixed(1) + '%';
+  }
+
+  getTotal(): number {
+    return this.filteredCoursesData.length;
+  }
+
+  getYear(date: string): number {
+    return +date.slice(0,4);
+  }
+
+  getCoursesByYearAndMonth(years: number[]): Map<number, number[]> {
+    if( this.filteredCoursesData.length === 0 ) return new Map();
+
     let output = new Map();
     years.forEach( year => {
       output.set(year, Array(12).fill(0) );
     });
-    console.log("initial output map", output);
 
-    this.data
+    this.filteredCoursesData
       .filter( (x: ICourseData) => x.created !== null )
       .forEach( current => {
         const date = new Date(current.created)

@@ -1,4 +1,11 @@
 <header class="page-header">
-  <h1 class="page-header__heading {{color}}">{{heading}}</h1>
+  <h1 class="page-header__heading {{color}}">
+    {{heading}}
+    <span *ngIf="filter"> in {{filter}}</span>
+  </h1>
+  <ul class="page-header__arrows" *ngIf="backward || forward">
+    <li *ngIf="backward" [routerLink]="backward" class="page-header__arrow {{color}}">&larr;</li>
+    <li *ngIf="forward" [routerLink]="forward" class="page-header__arrow {{color}}">&rarr;</li>
+  </ul>
   <h2 class="page-header__subheading" *ngIf="subHeading">{{subHeading}}</h2>
 </header>

@@ -1,5 +1,9 @@
 <heading [text]="heading"></heading>
 <p class="factoid__fact">{{fact}}</p>
-<ul class="factoid__list "*ngIf="list">
+<ul class="factoid__list" *ngIf="list && !isFilter">
   <li class="factoid__entry" *ngFor="let entry of list">{{entry}}</li>
+</ul>
+<ul class="factoid__list factoid__list-filter" *ngIf="list && isFilter">
+  <!--<li class="factoid__entry" *ngFor="let entry of list" (click)="onFilter(entry)" [class]="color">{{entry.name}}</li>-->
+  <li class="factoid__entry" *ngFor="let entry of list" [routerLink]="getRouterLink(entry)" [class]="getColor(entry)">{{entry.name}}</li>
 </ul>

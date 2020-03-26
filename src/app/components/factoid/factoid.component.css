@@ -18,6 +18,10 @@
   padding-left: 0;
 }
 
+.factoid__list-filter .factoid__entry{
+  cursor: pointer;
+}
+
 .factoid__entry{
   display: inline;
   text-transform: uppercase;

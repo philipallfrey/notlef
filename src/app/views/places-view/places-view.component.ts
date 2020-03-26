@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Colors } from '../../constants/Colors';
 import { IDataListEntry } from '../../models/IDataListEntry';
 import { IFactList } from '../../models/IFactList';
+import { IFilterElement } from '../../models/IFilterElement';
 import { PlacesViewDataService } from '../../services/places-view-data.service';
 
 @Component({
@@ -13,10 +15,18 @@ export class PlacesViewComponent implements OnInit {
   private institutionsLimit: number = 20;
   public color: string = Colors.PRIMARY;
   public colorClass: string = 'primary';
+  public filterElement: IFilterElement;
 
-  constructor(public placesViewDataService: PlacesViewDataService) { }
+  constructor(private route: ActivatedRoute, public placesViewDataService: PlacesViewDataService) { }
 
   ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      const value = +params.get('value');
+      const name = params.get('name') || '';
+      this.filterElement = {name: name, value: value} as IFilterElement;
+      this.placesViewDataService.filter(value, 'country_id');
+      console.log(`name ${name} value ${value}`);
+    })
   }
 
   get citiesCount(): number {
@@ -27,7 +37,7 @@ export class PlacesViewComponent implements OnInit {
     return this.placesViewDataService.getCityWithMostCourses();
   }
 
-  get countries(): string[] {
+  get countries(): IFilterElement[] {
     return this.placesViewDataService.getCountries();
   }
 
@@ -40,7 +50,7 @@ export class PlacesViewComponent implements OnInit {
   }
 
   get institutions(): IDataListEntry[] {
-    return this.placesViewDataService.getInstitutions( this.institutionsLimit );
+    return this.placesViewDataService.getInstitutions(this.institutionsLimit);
   }
 
   get institutionsCount(): number {
