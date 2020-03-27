@@ -1,0 +1,15 @@
+.overview__introduction{
+  grid-column: 1 / span 3;
+  grid-row: 1 / span 1;
+}
+
+.overview__instructions{
+  grid-column: 4 / span 1;
+  grid-row: 1 / span 3
+}
+
+.overview__icon{
+  height: 1.5em;
+  vertical-align: bottom;
+  width: 1.5em;
+}
