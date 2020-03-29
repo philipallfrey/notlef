@@ -1,6 +1,6 @@
 <heading text="Figure 2: Courses by region" [csvData]="csvData"></heading>
 <div *ngFor="let row of rows" class="canvas-wrapper">
-  <canvas baseChart width="400" height="96"
+  <canvas baseChart width="400" height="72"
     [datasets]="lineChartData[row]"
     [labels]="lineChartLabels[row]"
     [options]="lineChartOptions"

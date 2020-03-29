@@ -18,8 +18,15 @@ export class CoursesByPlaceChartComponent implements OnInit {
   public lineChartData: Record<number, ChartDataSets[]> = {};
   public lineChartLabels: Record<number, Label[]> = {};
   public lineChartOptions: ChartOptions = {
-
     responsive: true,
+    layout: {
+      padding: {
+        left: 0,
+        right: 0,
+        top: 24,
+        bottom: 0
+      }
+    },
     scales:{
       xAxes:[{
         ticks:{
@@ -38,7 +45,7 @@ export class CoursesByPlaceChartComponent implements OnInit {
       // Change options for ALL labels of THIS CHART
       datalabels: {
         font:{
-          family: 'Nimbus Sans L',
+          family: 'Spectral',
           size: 14
         },
       }
@@ -109,7 +116,7 @@ export class CoursesByPlaceChartComponent implements OnInit {
         { data: [...pseudoGaussian, 0],
           datalabels:{
             anchor: 'start',
-            align: function(context){ return context.dataset.data[context.dataIndex] > 4 ? 'bottom' : 'top'},
+            align: 'top',
             color: '#333',
             display: [...dataLabels, false],
             rotation: 0,

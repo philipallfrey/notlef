@@ -17,6 +17,14 @@ export class CoursesByYearChartComponent implements OnInit {
   public lineChartLabels: Label[] = ['','JAN', '', 'FEB', '', 'MAR', '', 'APR', '', 'MAY', '', 'JUN', '', 'JUL', '', 'AUG', '', 'SEP', '', 'OCT', '', 'NOV', '', 'DEC', ''];
   public lineChartOptions: ChartOptions = {
     responsive: true,
+    layout: {
+      padding: {
+        left: 0,
+        right: 0,
+        top: 24,
+        bottom: 0
+      }
+    },
     scales:{
       xAxes:[{
         display: false,
@@ -36,7 +44,11 @@ export class CoursesByYearChartComponent implements OnInit {
     plugins: {
       // Change options for ALL labels of THIS CHART
       datalabels: {
-        display: false,
+        align: 'top',
+        display: function(context) {
+          const value = context.dataset.data[context.dataIndex];
+          return value > 10; //TODO use dynamic value
+        },
         font:{
           family: 'Spectral'
         }
