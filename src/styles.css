@@ -1,4 +1,4 @@
-/* You can add global styles to this file, and also import other style files */
+/** Web fonts */
 @font-face {
   font-family: 'Nimbus Sans L';
   src: url('./fonts/nimbus-sans-l-webfont.woff') format('woff');
@@ -38,7 +38,11 @@ data-list{
   grid-row: 1 / span 4;
 }
 
-/* These three variables are set by the ColorService */
+.inactive{
+  color: #ccc;
+}
+
+/** These three variables are set by the ColorService */
 .primary{
   color: var(--primary-color);
 }
@@ -49,8 +53,4 @@ data-list{
 
 .tertiary{
   color: var(--tertiary-color);
-}
-
-.inactive{
-  color: #ccc;
 }

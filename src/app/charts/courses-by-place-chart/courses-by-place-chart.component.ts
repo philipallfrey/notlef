@@ -10,9 +10,8 @@ import { draw } from 'patternomaly';
   styleUrls: ['./courses-by-place-chart.component.css']
 })
 export class CoursesByPlaceChartComponent implements OnInit {
-
-  @Input() data: Map<string, number>[];
   @Input() color: string;
+  @Input() data: Map<string, number>[];
 
   public rows = [];
   public maxAxis: number = 0;
@@ -40,7 +39,7 @@ export class CoursesByPlaceChartComponent implements OnInit {
       datalabels: {
         font:{
           family: 'Nimbus Sans L',
-          size: 14 
+          size: 14
         },
       }
     }
@@ -63,6 +62,17 @@ export class CoursesByPlaceChartComponent implements OnInit {
     this.findMaxAxis();
     this.setColors();
     this.populateChartData();
+  }
+
+  get csvData(): any[] {
+    let output = [];
+    this.data.forEach( row => {
+      row.forEach((count, region) => {
+      //Each row in the csv consists of region, courses count
+      output.push({ region: region, count: count});
+      })
+    });
+    return output;
   }
 
   findMaxAxis(): void {

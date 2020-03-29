@@ -1,1 +1,13 @@
-<h3 class="heading">{{text}}</h3>
+<h3 class="heading">
+  {{text}}
+  <span *ngIf="csvData?.length" (click)="onDownload()" class="heading__icon heading__icon-download" title="Download this data as CSV"></span>
+  <span *ngIf="apiData" (click)="onPresentEndpoint()" class="heading__icon heading__icon-info" title="API endpoint to query for this data"></span>
+</h3>
+
+<div *ngIf="showApiDataModal" class="modal__background">
+  <div class="modal__content">
+    <h4 class="modal__heading">{{text}}</h4>
+    <p>These data were obtained from the endpoint<br/><a [href]="apiService.getUrl(apiData)">{{ apiData }}</a></p>
+    <button (click)="closeApiDataModal()" class="modal__button">Close</button>
+  </div>
+</div>

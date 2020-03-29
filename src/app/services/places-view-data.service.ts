@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Endpoints } from '../constants/Endpoints';
+import { ICityInstitutionCount } from '../models/ICityInstitutionCount';
 import { IDataListEntry } from '../models/IDataListEntry';
 import { IFactList } from '../models/IFactList';
 import { IFilterElement } from '../models/IFilterElement';
@@ -148,8 +149,8 @@ export class PlacesViewDataService {
     return this.filteredInstitutionsData[0].name; //Currently there are two institutions with the most courses, for simplicity take the first
   }
 
-  getMostInstitutionsPerCity(): IFactList {
-    if (this.filteredInstitutionsData.length === 0) return {fact:'', list:[]} as IFactList;
+  getInstitutionsPerCity(): ICityInstitutionCount[] {
+    if (this.filteredInstitutionsData.length === 0) return [];
 
     let cities = new Map();
     this.filteredInstitutionsData.forEach(current => {
@@ -160,11 +161,18 @@ export class PlacesViewDataService {
       }
     });
 
-    const topCity = [...cities.entries()]
-      .sort((a,b) => a[1] - b[1])
-      .pop();
+    return [...cities.entries()]
+      .sort((a,b) => b[1] - a[1])
+      .map( city => {
+        return { institution_count: city[1], city: city[0]} as ICityInstitutionCount;
+      });
+  }
 
-    return { fact: this.digitToWordService.convert(topCity[1]), list: [topCity[0]]} as IFactList;
+  getMostInstitutionsPerCity(): IFactList {
+    if (this.filteredInstitutionsData.length === 0) return { fact:'', list: [] } as IFactList;
+
+    const topCity = this.getInstitutionsPerCity()[0];
+    return { fact: this.digitToWordService.convert(topCity.institution_count), list: [topCity.city]} as IFactList;
   }
 
 }

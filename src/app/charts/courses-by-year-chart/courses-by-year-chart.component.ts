@@ -14,18 +14,22 @@ export class CoursesByYearChartComponent implements OnInit {
   @Input() years: number[]; //TODO get from data
 
   public lineChartData: Record<number, ChartDataSets[]> = {};
-  public lineChartLabels: Label[] = ['','Jan', '', 'Feb', '', 'Mar', '', 'Apr', '', 'May', '', 'Jun', '', 'Jul', '', 'Aug', '', 'Sep', '', 'Oct', '', 'Nov', '', 'Dec', ''];
+  public lineChartLabels: Label[] = ['','JAN', '', 'FEB', '', 'MAR', '', 'APR', '', 'MAY', '', 'JUN', '', 'JUL', '', 'AUG', '', 'SEP', '', 'OCT', '', 'NOV', '', 'DEC', ''];
   public lineChartOptions: ChartOptions = {
     responsive: true,
     scales:{
       xAxes:[{
         display: false,
+        ticks:{
+          fontFamily: 'Spectral'
+        },
         gridLines: {
           display: false
         }
       }],
       yAxes:[{
-        type: 'logarithmic',
+        id: 'y-axis-0',
+        type: 'linear',
         display: false
       }]
     },
@@ -34,16 +38,17 @@ export class CoursesByYearChartComponent implements OnInit {
       datalabels: {
         display: false,
         font:{
-          family: 'Nimbus Sans L'
-        },
+          family: 'Spectral'
+        }
       }
     }
   };
   //Change type from Colors[] to any, to allow use of patterns
+  //Overridden in this.setColors because input color not available until OnInit
   public lineChartColors: any[] = [
     {
-      //borderColor: 'black',
-      backgroundColor: draw('diagonal', '#dd5a83'),
+      borderColor: 'black',
+      backgroundColor: 'white',
     },
   ];
   public lineChartLegend = false;
@@ -55,13 +60,36 @@ export class CoursesByYearChartComponent implements OnInit {
 
   ngOnInit() {
     console.log("data", this.data);
+    this.setColors();
     this.populateChartData();
+  }
 
+  get csvData(): any[] {
+    let output = [];
+    this.data.forEach( (yearData, year) => {
+      //Each row in the csv consists of year, month, courses count
+      yearData.forEach( (count, index) => {
+        output.push({ year: year, month: index + 1, count: count});
+      })
+    });
+    return output
+  }
+
+  getModifiedChartOptions(year: number): ChartOptions {
+    const finalYear = this.years[this.years.length - 1];//TODO neater way without using pop?
+
+    if(year === finalYear){
+      this.lineChartOptions.scales.xAxes[0].display = true;
+    } else {
+      this.lineChartOptions.scales.xAxes[0].display = false;
+    }
+    return this.lineChartOptions;
   }
 
   get chartData(): Record<number, ChartDataSets[]> {
     return this.populateChartData()
   }
+
   populateChartData(): Record<number, ChartDataSets[]>{
     this.findMaxAxis(this.data);
     //TODO: Define a new type of bar chart where the bars are Gaussian shapes
@@ -73,7 +101,13 @@ export class CoursesByYearChartComponent implements OnInit {
       }, []);
       //Set second dataset with invisible point to keep scales consistent.
       //Workaround for unsupported this.lineChartOptions.scales.yAxes[0].max option
-      this.lineChartData[year] = [{ data: [...pseudoGaussian, 0], label: `${year}`, pointRadius: 0 },{data: [this.maxAxis], pointRadius: 0, label: ''}];
+      this.lineChartData[year] = [
+        { data: [...pseudoGaussian, 0], label: `${year}`, pointRadius: 0 },
+        { data: [this.maxAxis], datalabels:
+          { align: 45, display: [true], formatter: function(value, context) {
+            return context.dataset.label;
+            }
+          }, pointRadius: 0, label: `${year}` }];
     })
 
     return this.lineChartData;
@@ -90,5 +124,10 @@ export class CoursesByYearChartComponent implements OnInit {
 
     //TODO Update @types to support this option
     //this.lineChartOptions.scales.yAxes[0].max = max;
+  }
+
+  setColors(): void {
+    this.lineChartColors[0].borderColor = '';
+    this.lineChartColors[0].backgroundColor = this.color;
   }
 }

@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { ngxCsv } from 'ngx-csv/ngx-csv';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'heading',
@@ -7,7 +9,24 @@ import { Component, Input } from '@angular/core';
 })
 export class HeadingComponent{
   @Input() text: string;
+  @Input() csvData: any[] = [];
+  @Input() apiData: string = '';
 
-  constructor() { }
+  showApiDataModal: boolean = false;
 
+  constructor(public apiService: ApiService) { }
+
+  onDownload(): void {
+    console.log("on download");
+    new ngxCsv(this.csvData, `${this.text}`, {showLabels: true, headers: Object.keys(this.csvData[0])});
+  }
+
+  onPresentEndpoint(): void {
+    console.log("data:", this.apiData);
+    this.showApiDataModal = true;
+  }
+
+  closeApiDataModal(): void {
+    this.showApiDataModal = false;
+  }
 }

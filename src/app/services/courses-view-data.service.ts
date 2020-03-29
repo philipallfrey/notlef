@@ -27,19 +27,16 @@ export class CoursesViewDataService {
         this.filteredCoursesData = this.coursesData;
       }
       this.hasData = true;
-      console.log("has courses");
     });
 
     this.apiService.getData(Endpoints.LANGUAGES).subscribe( data => {
       this.languagesData = data.filter(x => x.course_count > 0) as INamedIdentifierWithCount[];
-      console.log("languages", this.languagesData);
       if(this.filterValue){
         this.filter(this.filterValue); //handle case where view is filtered before it finished loading data
       } else {
         this.filteredLanguagesData = this.languagesData;
       }
       //this.hasData = true; //TODO Split by data type?
-      console.log("has languages");
     });
   }
 
@@ -54,9 +51,10 @@ export class CoursesViewDataService {
     }
   }
 
-  //Unfortunately ICourseData.online is in the schema but not in the data returned by the API
+  //https://dhcr.clarin-dariah.eu/api/v1/courses/index?online=true correctly returns only courses with online=true
+  //Unfortunatelyly https://dhcr.clarin-dariah.eu/api/v1/courses/index does not include the value of the "online" field
   private manuallyInsertOnlineData(data: any[]) {
-    const onlineCourseIds = [170, 175, 177, 178, 598];
+    const onlineCourseIds = [167, 170, 173, 174, 175, 176, 177, 178, 179, 598];
     return data.map(current => {
       if(onlineCourseIds.includes(current.id)) current.online = true;
       return current;

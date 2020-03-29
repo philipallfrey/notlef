@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Colors } from '../../constants/Colors';
+import { Endpoints } from '../../constants/Endpoints';
+import { ICityInstitutionCount } from '../../models/ICityInstitutionCount';
 import { IDataListEntry } from '../../models/IDataListEntry';
 import { IFactList } from '../../models/IFactList';
 import { IFilterElement } from '../../models/IFilterElement';
@@ -33,12 +35,28 @@ export class PlacesViewComponent implements OnInit {
     return this.placesViewDataService.getCitiesCount();
   }
 
+  get citiesEndpoint(): string {
+    return Endpoints.CITIES;
+  }
+
   get cityWithMostCourses(): IFactList {
     return this.placesViewDataService.getCityWithMostCourses();
   }
 
+  get cityWithMostCoursesEndpoint(): string {
+    return Endpoints.CITIES;
+  }
+
+  get mostInstitutionsPerCity() : IFactList {
+    return this.placesViewDataService.getMostInstitutionsPerCity();
+  }
+
   get countries(): IFilterElement[] {
     return this.placesViewDataService.getCountries();
+  }
+
+  get countriesEndpoint(): string {
+    return Endpoints.COUNTRIES;
   }
 
   get countriesByRegion(): Map<string, number>[] {
@@ -53,16 +71,21 @@ export class PlacesViewComponent implements OnInit {
     return this.placesViewDataService.getInstitutions(this.institutionsLimit);
   }
 
+  get institutionsEndpoint(): string {
+    return Endpoints.INSTITUTIONS;
+  }
+
   get institutionsCount(): number {
     return this.placesViewDataService.getInstitutionsCount();
+  }
+
+  get institutionsPerCity(): ICityInstitutionCount[] {
+    return this.placesViewDataService.getInstitutionsPerCity()
   }
 
   get institutionWithMostCourses(): string {
     return this.placesViewDataService.getInstitutionWithMostCourses();
   }
 
-  get mostInstitutionsPerCity() : IFactList {
-    return this.placesViewDataService.getMostInstitutionsPerCity();
-  }
 
 }

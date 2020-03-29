@@ -1,9 +1,67 @@
 .heading{
   border-bottom: solid 1px;
+  display: flex;
   font-size: 0.75rem;
   font-weight: normal;
   letter-spacing: 0.5px;
   margin-bottom: 0.75rem;
   margin-top: 0;
   text-transform: uppercase;
+}
+
+.heading__icon{
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+  display: block;
+  flex-shrink: 0;
+  margin-left: auto;
+  width: 1.5em;
+  height: 1.5em;
+}
+
+.heading__icon-download{
+  background-image: url('/assets/download-icon.svg');
+}
+
+.heading__icon-info{
+  background-image: url('/assets/info-icon.svg');
+}
+
+.modal__background{
+  align-items: center;
+  background: rgba(0,0,0,.6);
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  left: 0;
+  right: 0;
+  position: fixed;
+  top: 0;
+  z-index: 10;
+}
+
+.modal__content{
+  background: #fff;
+  padding: 1em;
+  width: 50%;
+  z-index: 11;
+}
+
+.modal__heading{
+  border-bottom: solid 1px;
+  font-family: 'Nimbus Sans L';
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.modal__button{
+  border: none;
+  cursor: pointer;
+  display: block;
+  font-family: 'Nimbus Sans L';
+  font-size: 0.875rem;
+  margin: 1em auto 0;
+  padding: 0.5em 1em;
 }

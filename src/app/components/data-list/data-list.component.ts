@@ -8,6 +8,8 @@ import { IDataListEntry } from '../../models/IDataListEntry';
   styleUrls: ['./data-list.component.css']
 })
 export class DataListComponent implements OnInit {
+  @Input() apiData: string;
+  @Input() csvData: any[]; //TODO: Is this too loose?
   @Input() heading: string;
   @Input() entries: IDataListEntry;
   //TODO: Allow entries to filter all the data on the page
