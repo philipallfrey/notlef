@@ -13,3 +13,18 @@
   vertical-align: bottom;
   width: 1.5em;
 }
+
+.overview__thumbnails{
+  cursor: pointer;
+  max-width: 100%;
+}
+
+.overview__thumbnails-courses{
+  grid-column: 1 / span 1;
+  grid-row: 2 / span 1;
+}
+
+.overview__thumbnails-places{
+  grid-column: 2 / span 1;
+  grid-row: 2 / span 1;
+}
