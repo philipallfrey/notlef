@@ -14,6 +14,7 @@ import { CoursesByYearChartComponent } from './charts/courses-by-year-chart/cour
 import { HeadingComponent } from './components/heading/heading.component';
 import { PlacesViewComponent } from './views/places-view/places-view.component';
 import { CoursesByPlaceChartComponent } from './charts/courses-by-place-chart/courses-by-place-chart.component';
+import { ColophonViewComponent } from './views/colophon-view/colophon-view.component';
 
 @NgModule({
   declarations: [
@@ -26,13 +27,14 @@ import { CoursesByPlaceChartComponent } from './charts/courses-by-place-chart/co
     CoursesByYearChartComponent,
     HeadingComponent,
     PlacesViewComponent,
-    CoursesByPlaceChartComponent
+    CoursesByPlaceChartComponent,
+    ColophonViewComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ChartsModule,
-    HttpClientModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

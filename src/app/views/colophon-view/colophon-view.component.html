@@ -1,19 +1,43 @@
-<page-heading heading="Colophon" subHeading="All the details" backward="/places" forward="/overview"></page-heading>
+<page-heading heading="Colophon" subHeading="All the details" [color]="colorClass" backward="/places" forward="/overview"></page-heading>
 <div class="grid-container">
   <div class="colophon__inspiration">
     <heading text="Inspiration"></heading>
-    <p></p>
+    <p>The design for this visualisation was heavily inspired by the <a href="http://feltron.com/FAR09.html">2009 Feltron Annual Report</a>, by Nicholas Felton, hence the name Notlef (which is Felton, backwards). Hat tip to Benjamin Cooley for mentioning this in <a href="https://medium.com/nightingale/my-year-in-data-a-visual-reflection-on-2019-e1545be7d680">his article for Nightingale</a>, the Data Visualization Society's Journal.</p>
+    <p>The icon for the logo I modified from <a href="https://www.vecteezy.com/free-vector/bell-curve">Bell Curve Vectors by Vecteezy</a>.</p>
+    <p>The accent colours were inspired by the colours of the chart.js logo.</p>
   </div>
   <div class="colophon__implementation">
     <heading text="Implementation"></heading>
-    <p></p>
+    <p>I implemented this visualisation as an Angular 9 app. This may have been overkill for a mostly static visualisation, but I had two motivations. First, it was the framework I am using for work at the moment, so this prevented switching between different languages. Second, it would make it easy to implement dynamic filtering of the data, which I ended up having time to do.</p>
+    <p>The charts are drawn using the open-source <a href="https://www.chartjs.org/">Chart.js library</a>, via the <a href="https://github.com/valor-software/ng2-charts">ng2-charts</a> package for Angular.</p>
+    <p>I chose fonts to be as close as possible to the Feltron report but available under a free licence. The heading fonts is <a href="https://www.fontsquirrel.com/fonts/nimbus-sans-l">Nimbus Sans L</a>, which is licensed under the GPL v2. The body font is <a href="https://www.fontsquirrel.com/fonts/Spectral">Spectral</a>, which is not the same as <a href="https://vllg.com/constellation/galaxie-copernicus">Galaxie Copernicus</a> used in the Feltron Report, but is a similar looking transitional serif, and is available under a SIL Open Font License v1.10. I chose to use old-style numerals because I prefer their typographical appearance.</p>
   </div>
-  <div class="colophon_incomplete">
+  <div class="colophon__incomplete">
     <heading text="Incomplete"></heading>
-    <p></p>
+    <p>In a project of this nature there will always be things that have not been implemented due to a lack of time. Here is the list of things which I would have liked to have done, but ran out of time to implement. In addition there are TODO comments scattered throughout the code where I have thought there might or should be a more elegant way to do something.</p>
+    <dl>
+      <dt>Make the website responsive.</dt>
+        <dd>Currently I have not taken any measures to make the visualisation look good on smaller screens. I have used CSS Grid for the layout, so moving things around, or changing the number of columns is easy. However the charts are drawn on a <code>&lt;canvas&gt;</code> element, which requires explicit dimensions. Chart.js does have a responsive mode, which I have enabled, but this preserves the aspect ratio of the canvas, which results in a lot of white space. </dd>
+    <dt>Implement a proximity visualisation</dt>
+      <dd>Based on pages 2 and 3 of the Feltron Report, I was going to implement a radial plot showing bearing and distance of cities with digital humanities courses, ideally centred on the visitor's location.</dd>
+    <dt>Implement a content visualisation</dt>
+      <dd>I also wanted implement another page visualising content from the courses, including charts for duration and Tadirah activity, and lists/factoids from discipline and description keywords.</dd>
+    <dt>Fix change detection bugs</dt>
+      <dd>There are a few places where Angular's change detection either seems not to fire, or fires too often. One of these is on the Courses page, where filtering by language only seems to update the chart correctly if one toggles the filter on and off, rather than going from filtering by one language to filtering by another. Also, since the whole page needs to re-render when a filter is applied, I want to alter the change detection strategy. </dd>
+    <dt>Include filter in data info</dt>
+      <dd>If you have filtered the data on a page, then click the info icon next to a fact, it would be nice to automatically append the correct filter parameter to the endpoint that is shown.</dd>
+    </dl>
   </div>
-  <div class="colophon_inconsistencies">
+  <div class="colophon__inconsistencies">
     <heading text="Inconsistencies"></heading>
-    <p></p>
+    <p>I encountered the following cases where the data or functionality was not what I expected:</p>
+    <ul>
+      <li>The <a href="https://app.swaggerhub.com/apis-docs/hashmich/DHCR-API/1.0#/Course">course schema</a> includes a true/false flag for "online", the endpoint <a href="https://dhcr.clarin-dariah.eu/api/v1/courses/index?online=true">/courses/index?online=true</a> apparently filters the list of courses to those with online=true, but the data from the /courses/index and /courses/view/[id] endpoints do not contain this field. </li>
+      <li>In the web interface, the detail view for a course shows a field "Presence", usually with a value of "campus". This data does not seem to be accessible via tha API.</li>
+      <li><a href="https://dhcr.clarin-dariah.eu/api/v1/courses/view/164">Course 164</a> has a creation timestamp of null.</li>
+    </ul>
+  </div>
+  <div class="colophon__logo">
+    <img src="/assets/logo.svg" class="colophon__logo-image"/>
   </div>
 </div>

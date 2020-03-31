@@ -1,0 +1,62 @@
+.colophon__inspiration{
+  grid-column: 1 / span 1;
+  grid-row: 1 / span 1;
+}
+
+.colophon__implementation{
+  grid-column: 2 / span 2;
+  grid-row: 1 / span 1;
+}
+
+.colophon__incomplete{
+  grid-column: 1 / span 3;
+  grid-row: 2 / span 1;
+}
+
+dl{
+  column-count: 3;
+}
+
+dt{
+  break-after: avoid;
+  font-style: italic;
+  margin-top: 1.5em
+}
+
+dt:before{
+  content: '❧ '; /* \2767 ☙ \2619 */
+  font-style: normal;
+}
+
+dt:first-child{
+  margin-top: 0;
+}
+
+dd{
+  break-before: avoid;
+  margin-left: 0;
+}
+
+.colophon__inconsistencies{
+  grid-column: 4 / span 1;
+  grid-row: 1 / span 1;
+}
+
+ul{
+  margin: 0;
+  padding: 0;
+}
+
+li{
+  list-style-type: disc;
+}
+
+.colophon__logo{
+  grid-column: 4 / span 1;
+  grid-row: 2 / span 1;
+}
+
+.colophon__logo-image{
+  margin-top: 1.25rem;
+  width: 100%;
+}
