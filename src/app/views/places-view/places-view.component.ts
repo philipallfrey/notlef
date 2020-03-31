@@ -27,7 +27,6 @@ export class PlacesViewComponent implements OnInit {
       const name = params.get('name') || '';
       this.filterElement = {name: name, value: value} as IFilterElement;
       this.placesViewDataService.filter(value, 'country_id');
-      console.log(`name ${name} value ${value}`);
     })
   }
 

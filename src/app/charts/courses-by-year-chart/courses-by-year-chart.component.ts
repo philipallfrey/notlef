@@ -71,7 +71,6 @@ export class CoursesByYearChartComponent implements OnInit {
   constructor( ) { }
 
   ngOnInit() {
-    console.log("data", this.data);
     this.setColors();
     this.populateChartData();
   }
@@ -128,7 +127,6 @@ export class CoursesByYearChartComponent implements OnInit {
   findMaxAxis(data: Map<number, number[]>): void{
     let max = 0;
     data.forEach( (current, year) => {
-      console.log(year, current);
       const currentMax = Math.max(...current);
       max = currentMax > max ? currentMax : max;
     });

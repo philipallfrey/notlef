@@ -27,7 +27,6 @@ export class CoursesViewComponent implements OnInit {
       const value = +params.get('value');
       const name = params.get('name') || '';
       this.filterElement = {name: name, value: value} as IFilterElement;
-      console.log("name, value", name, value);
       this.coursesViewDataService.filter(value);
     })
   }
@@ -41,7 +40,6 @@ export class CoursesViewComponent implements OnInit {
   }
 
   get courseTitlesData(): string {
-    console.log(`${Endpoints.COURSES}?sort=updated:DESC`);
     return `${Endpoints.COURSES}?sort=updated:DESC`;
   }
 

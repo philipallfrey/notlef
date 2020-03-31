@@ -31,6 +31,7 @@ body{
   grid-column-gap: 4%;
   grid-row-gap: 1.5rem;
   grid-template-columns: repeat(4, 1fr [col-start]);
+  margin-top: 1.5rem;
 }
 
 data-list{

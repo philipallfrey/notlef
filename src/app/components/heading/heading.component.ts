@@ -17,12 +17,10 @@ export class HeadingComponent{
   constructor(public apiService: ApiService) { }
 
   onDownload(): void {
-    console.log("on download");
     new ngxCsv(this.csvData, `${this.text}`, {showLabels: true, headers: Object.keys(this.csvData[0])});
   }
 
   onPresentEndpoint(): void {
-    console.log("data:", this.apiData);
     this.showApiDataModal = true;
   }
 

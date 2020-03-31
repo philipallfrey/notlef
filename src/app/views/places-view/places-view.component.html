@@ -1,4 +1,4 @@
-<page-heading heading="Places" subHeading="Countries, Cities, and Institutions." [color]="colorClass" [filter]="filterElement.name" backward="/courses" forward="/content"></page-heading>
+<page-heading heading="Places" subHeading="Countries, Cities, and Institutions." [color]="colorClass" [filter]="filterElement.name" backward="/courses" forward="/colophon"></page-heading>
 <div class="grid-container" *ngIf="placesViewDataService.hasData === true">
   <data-list heading="Institutions with the most courses" [entries]="institutions" [apiData]="institutionsEndpoint"></data-list>
   <courses-by-place-chart [data]="countriesByRegion" [color]="color"></courses-by-place-chart>

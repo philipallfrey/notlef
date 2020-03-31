@@ -65,7 +65,6 @@ export class CoursesByPlaceChartComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log('color', this.color);
     this.findMaxAxis();
     this.setColors();
     this.populateChartData();
