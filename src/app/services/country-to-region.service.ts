@@ -102,6 +102,7 @@ export class CountryToRegionService {
     'Argentina': 'South America',
     'Bolivia': 'South America',
     'Brazil': 'South America',
+    'Brasil': 'South America', // observed in data
     'Chile': 'South America',
     'Colombia': 'South America',
     'Ecuador': 'South America',

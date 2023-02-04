@@ -13,16 +13,18 @@ import { CoursesViewDataService } from '../../services/courses-view-data.service
   styleUrls: ['./courses-view.component.css']
 })
 export class CoursesViewComponent implements OnInit {
-  //TODO fill automatically, or maybe get from Map?
-  years: number[] = [2014, 2015, 2016, 2017, 2018, 2019, 2020];
   private coursesLimit: number = 20;
   public color: string = Colors.TERTIARY;
   public colorClass: string = 'tertiary';
   public filterElement: IFilterElement;
+  private initialYear: number = 2014;
+  public years: number[];
 
   constructor(private route: ActivatedRoute, public coursesViewDataService: CoursesViewDataService) { }
 
   ngOnInit(): void {
+    const currentYear = new Date().getFullYear();
+    this.years = Array.from(Array(currentYear - this.initialYear + 1), (element, index) => index + this.initialYear);
     this.route.paramMap.subscribe(params => {
       const value = +params.get('value');
       const name = params.get('name') || '';
